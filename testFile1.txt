@@ -1,0 +1,1581 @@
+
+1
+00:00:00.160 --> 00:00:04.880
+Hey what's up guys. Welcome to CertBros! In this video we're going to be looking
+
+2
+00:00:04.880 --> 00:00:21.039
+at vlans okay so vlan stands for virtual
+
+3
+00:00:21.039 --> 00:00:27.920
+local area network using vlans we can virtually separate our LANs into
+
+4
+00:00:27.920 --> 00:00:33.440
+smaller chunks but why would we want to do that? Well
+
+5
+00:00:33.440 --> 00:00:37.600
+there are a few reasons why we might want to use VLANs
+
+6
+00:00:37.600 --> 00:00:40.960
+one of the main reasons is something we've already spoken about
+
+7
+00:00:40.960 --> 00:00:47.200
+and that is broadcast traffic. So let's remind ourselves about
+
+8
+00:00:47.200 --> 00:00:53.199
+broadcasts. A LAN is a single area of a network
+
+9
+00:00:53.199 --> 00:00:56.239
+and in this case, we have a single broadcast domain
+
+10
+00:00:56.239 --> 00:00:59.840
+created by our switch
+
+11
+00:01:00.000 --> 00:01:05.199
+if host A sends a broadcast then every device will receive it
+
+12
+00:01:05.199 --> 00:01:10.560
+that's fine for our 4 computer network but let's imagine each computer
+
+13
+00:01:10.560 --> 00:01:14.960
+represents an entire department
+
+14
+00:01:15.759 --> 00:01:19.439
+very quickly broadcast traffic can start to slow down our networks
+
+15
+00:01:19.439 --> 00:01:26.720
+and devices. So we need a way to manage all of this traffic. One way
+
+16
+00:01:26.720 --> 00:01:34.079
+is to add a router. This would create separate broadcast domains per interface
+
+17
+00:01:34.079 --> 00:01:37.600
+but it's an extra bit of hardware to purchase install
+
+18
+00:01:37.600 --> 00:01:43.360
+cable and manage. Another, more radical option is to physically
+
+19
+00:01:43.360 --> 00:01:48.079
+split the network into separate sections. This would create
+
+20
+00:01:48.079 --> 00:01:53.840
+broadcast domains for each department. Traffic wouldn't be sent from one
+
+21
+00:01:53.840 --> 00:01:58.399
+department to the other which drastically reduces our broadcast
+
+22
+00:01:58.399 --> 00:02:02.479
+overhead. But this option still has the issue of
+
+23
+00:02:02.479 --> 00:02:06.000
+needing to purchase and set up new equipment and neither one
+
+24
+00:02:06.000 --> 00:02:09.759
+of these options is very scalable. Say we wanted to add a
+
+25
+00:02:09.759 --> 00:02:13.520
+new department both options would require work to set
+
+26
+00:02:13.520 --> 00:02:17.280
+up and we don't want to do that. This is
+
+27
+00:02:17.280 --> 00:02:22.000
+where VLANs come in VLANs give us all of the benefits of
+
+28
+00:02:22.000 --> 00:02:26.640
+physically separating our network but with the added bonus of being able
+
+29
+00:02:26.640 --> 00:02:30.160
+to do this virtually. The traffic still behaves in
+
+30
+00:02:30.160 --> 00:02:34.160
+the same way as if it was physically split. Traffic isn't forwarded
+
+31
+00:02:34.160 --> 00:02:38.400
+to any other departments and it's almost like having four
+
+32
+00:02:38.400 --> 00:02:43.120
+miniature switches inside our single one
+
+33
+00:02:43.120 --> 00:02:47.120
+The way this works is by assigning interfaces to specific
+
+34
+00:02:47.120 --> 00:02:53.280
+VLANs. Only interfaces in the same VLAN can communicate with each other
+
+35
+00:02:53.280 --> 00:02:57.280
+in this example finance is yellow IT is red
+
+36
+00:02:57.280 --> 00:03:02.959
+Sales is green and HRis purple. I'm using colors but in reality, you will
+
+37
+00:03:02.959 --> 00:03:09.040
+probably use numbers such as VLAN 10 VLAN 20 etc
+
+38
+00:03:09.040 --> 00:03:13.120
+If we wanted to add a new finance server then we just need to assign that
+
+39
+00:03:13.120 --> 00:03:16.640
+interface to the finance VLAN and communication
+
+40
+00:03:16.640 --> 00:03:20.239
+between those two interfaces is allowed because they're on the same
+
+41
+00:03:20.239 --> 00:03:22.640
+VLAN
+
+42
+00:03:23.280 --> 00:03:26.640
+If we wanted to add a brand new marketing department
+
+43
+00:03:26.640 --> 00:03:31.680
+then we just create that VLAN and assign it to an interface
+
+44
+00:03:31.680 --> 00:03:37.519
+As you can see VLANs make it very very easy to control broadcast domains
+
+45
+00:03:37.519 --> 00:03:40.720
+It's also scalable. We don't need new equipment
+
+46
+00:03:40.720 --> 00:03:45.440
+or to re-cable everything anytime you want to make a change
+
+47
+00:03:45.440 --> 00:03:52.400
+okay, so that's the overview. Let's look at how this works in a bit more detail
+
+48
+00:03:52.400 --> 00:03:55.680
+Straight out of the box Cisco and most other switches
+
+49
+00:03:55.680 --> 00:04:02.000
+have a default VLAN called VLAN 1. Every interface is assigned the default
+
+50
+00:04:02.000 --> 00:04:04.959
+VLAN. So this means every interface can talk
+
+51
+00:04:04.959 --> 00:04:08.720
+to each other. From here we can start to make our own
+
+52
+00:04:08.720 --> 00:04:13.599
+VLANs and split up our switch.we may want to make a VLAN called VLAN
+
+53
+00:04:13.599 --> 00:04:18.079
+10 and another called VLAN 20
+
+54
+00:04:18.079 --> 00:04:23.759
+You can add up to 4094 VLANs.This is the maximum number that is
+
+55
+00:04:23.759 --> 00:04:26.320
+supported
+
+56
+00:04:26.479 --> 00:04:30.479
+So now interfaces assigned to VLAN 10 can only communicate with
+
+57
+00:04:30.479 --> 00:04:37.120
+other interfaces assigned to VLAN 10 and it's the same for VLAN 20.
+
+58
+00:04:37.120 --> 00:04:40.400
+VLANs aren't restricted to just one switch
+
+59
+00:04:40.400 --> 00:04:44.080
+We can have the same VLANs across multiple switches.
+
+60
+00:04:44.080 --> 00:04:47.600
+This makes it very versatile and scalable
+
+61
+00:04:47.600 --> 00:04:52.160
+But this does leave us with a problem. If interfaces can only communicate with
+
+62
+00:04:52.160 --> 00:04:57.199
+other interfaces in the same VLAN, which VLAN do we assign to the link between
+
+63
+00:04:57.199 --> 00:05:01.919
+our two switches? If we leave it as the default VLAN, VLAN
+
+64
+00:05:01.919 --> 00:05:06.400
+10 and VLAN 20 won't be able to send traffic. If we
+
+65
+00:05:06.400 --> 00:05:10.639
+assign it to one of our new VLANs then only that VLAN can send traffic
+
+66
+00:05:10.639 --> 00:05:15.199
+between the two switches. The solution is a special type of
+
+67
+00:05:15.199 --> 00:05:18.880
+interface called a trunk
+
+68
+00:05:19.120 --> 00:05:22.800
+So there are two types of ports on a switch, an access port
+
+69
+00:05:22.800 --> 00:05:26.880
+and a trunk port. When a port is assigned to a VLAN
+
+70
+00:05:26.880 --> 00:05:32.400
+like VLAN 10 and VLAN 20 here this is known as an access port
+
+71
+00:05:32.400 --> 00:05:35.440
+An access port is designed for endpoint devices
+
+72
+00:05:35.440 --> 00:05:40.960
+to access the network such as computers and laptops. Now a
+
+73
+00:05:40.960 --> 00:05:45.120
+trunk port can send traffic from different VLANs
+
+74
+00:05:45.120 --> 00:05:49.360
+They're used to send traffic between networking devices
+
+75
+00:05:49.360 --> 00:05:54.240
+This leaves us with another problem though. How does the receiving switch
+
+76
+00:05:54.240 --> 00:05:59.520
+know which VLAN the traffic belongs to? The whole point of a VLAN is to separate
+
+77
+00:05:59.520 --> 00:06:03.120
+traffic. So when a trunk sends data that could be
+
+78
+00:06:03.120 --> 00:06:07.600
+from VLAN 1, VLAN 10 or VLAN 20 it needs a way to
+
+79
+00:06:07.600 --> 00:06:11.759
+identify which VLAN that traffic belongs to
+
+80
+00:06:11.759 --> 00:06:15.680
+This is done by using something called a tag
+
+81
+00:06:15.680 --> 00:06:20.720
+To understand tags we need to take a couple of steps back
+
+82
+00:06:20.720 --> 00:06:26.960
+Now most devices including computers do not know what VLANs are
+
+83
+00:06:26.960 --> 00:06:30.080
+Some devices are VLAN aware such as ip phones
+
+84
+00:06:30.080 --> 00:06:34.400
+but most are not. So a computer generates a frame
+
+85
+00:06:34.400 --> 00:06:38.880
+as normal. When that frame arrives at a switch
+
+86
+00:06:38.880 --> 00:06:43.759
+it's the switch that handles the VLANs. then it's forwarded to the correct
+
+87
+00:06:43.759 --> 00:06:47.120
+destination. The sending computer and the receiving
+
+88
+00:06:47.120 --> 00:06:52.560
+computer have no idea that VLANs were used. Now
+
+89
+00:06:52.560 --> 00:06:56.160
+when we have multiple switches connected with a trunk port
+
+90
+00:06:56.160 --> 00:07:02.400
+there is an extra step. The computer sends the frame as usual but when the
+
+91
+00:07:02.400 --> 00:07:06.160
+switch sends a frame over the trunk port it adds a new bit of
+
+92
+00:07:06.160 --> 00:07:11.160
+information. This is called an 802.1q tag
+
+93
+00:07:11.160 --> 00:07:17.440
+802.1q is the IEEE standard. It can also be called Dot1q. This tag
+
+94
+00:07:17.440 --> 00:07:21.919
+is 4 bytes and it contains a few bits of information
+
+95
+00:07:21.919 --> 00:07:28.520
+TPID or tag protocol identifier. This is used to identify the frame as an
+
+96
+00:07:28.520 --> 00:07:33.360
+802.1q tagged frame. It could also be ISL but is
+
+97
+00:07:33.360 --> 00:07:38.400
+rarely used today. TCI or tag control information
+
+98
+00:07:38.400 --> 00:07:42.960
+this contains three bits of information. The priority
+
+99
+00:07:42.960 --> 00:07:47.199
+DEI or drop eligible indicator and most importantly
+
+100
+00:07:47.199 --> 00:07:55.120
+the VLAN id. This tag field is then read and removed by the receiving switch
+
+101
+00:07:55.120 --> 00:07:59.919
+So to recap the frame is untagged when it's sent from the computer
+
+102
+00:07:59.919 --> 00:08:05.120
+is tagged over the trunk port it's then sent to the destination
+
+103
+00:08:05.120 --> 00:08:10.840
+computer untagged and our computers are again none the
+
+104
+00:08:10.840 --> 00:08:14.639
+wiser. The next thing we need to talk about is
+
+105
+00:08:14.639 --> 00:08:20.319
+something called native VLANs. A native VLAN is configured
+
+106
+00:08:20.319 --> 00:08:26.479
+per trunk interface. It's the VLAN that the switch assumes the frame is on
+
+107
+00:08:26.479 --> 00:08:30.639
+if it arrives on a trunk port with no tag
+
+108
+00:08:30.639 --> 00:08:36.880
+By default the native VLAN is VLAN 1. So let's say both of our computers
+
+109
+00:08:36.880 --> 00:08:41.120
+are assigned to the default vlan 1.
+
+110
+00:08:41.120 --> 00:08:46.480
+Just like before, the frame is sent untagged to the switch
+
+111
+00:08:46.480 --> 00:08:49.920
+Now if a switch is sending a frame across a trunk port
+
+112
+00:08:49.920 --> 00:08:52.959
+that belongs to its native VLAN the frame
+
+113
+00:08:52.959 --> 00:08:58.800
+is not tagged. When a switch receives a frame on its trunk port without a tag
+
+114
+00:08:58.800 --> 00:09:01.839
+it will assume that frame belongs to its native
+
+115
+00:09:01.839 --> 00:09:07.600
+VLAN which in this case is VLAN 1. It will then forward that frame to the
+
+116
+00:09:07.600 --> 00:09:13.680
+destination, again untagged. So you might be wondering, why
+
+117
+00:09:13.680 --> 00:09:19.200
+we use native VLANs. And there are a few reasons why
+
+118
+00:09:19.200 --> 00:09:26.320
+Hubs can't read or write tags. All hubs can do is forward frames
+
+119
+00:09:26.320 --> 00:09:31.040
+Let's say we have a hub in the middle connected to another host
+
+120
+00:09:31.040 --> 00:09:37.279
+Using untagged native VLANs means we can send frames to our new host
+
+121
+00:09:37.279 --> 00:09:41.839
+If we didn't use native VLANs and the frame was sent tagged
+
+122
+00:09:41.839 --> 00:09:45.760
+then the host will just discard the frame because it doesn't understand
+
+123
+00:09:45.760 --> 00:09:51.519
+VLAN tags. So a native VLAN is configured per trunk
+
+124
+00:09:51.519 --> 00:09:56.880
+interface. This can lead to problems. For example
+
+125
+00:09:56.880 --> 00:10:00.560
+let's say we change one side of our trunk to have the native VLAN
+
+126
+00:10:00.560 --> 00:10:06.959
+of 20 instead of 1. We now have two switches with different
+
+127
+00:10:06.959 --> 00:10:10.720
+native VLANs. Our computer will send the frame
+
+128
+00:10:10.720 --> 00:10:14.399
+As before, the first switch will see the interface
+
+129
+00:10:14.399 --> 00:10:19.040
+is assigned to its native VLAN and then forward that frame untagged
+
+130
+00:10:19.040 --> 00:10:23.839
+across the trunk. Do you see the problem here? The second
+
+131
+00:10:23.839 --> 00:10:27.760
+switch will assume the traffic should belong to
+
+132
+00:10:27.760 --> 00:10:32.880
+its native VLAN, VLAN 20 and the frame will not be sent to the
+
+133
+00:10:32.880 --> 00:10:38.000
+destination computer on VLAN 1. Luckily in real life you will be
+
+134
+00:10:38.000 --> 00:10:41.279
+alerted to this type of configuration on the switch
+
+135
+00:10:41.279 --> 00:10:44.320
+You'll probably see a message like this saying
+
+136
+00:10:44.320 --> 00:10:47.400
+"native VLAN mismatch"
+
+137
+00:10:47.600 --> 00:10:49.520
+This video is part of our full CCNA Course
+
+138
+00:10:49.520 --> 00:10:53.040
+which can be found in the description. So please feel free
+
+139
+00:10:53.040 --> 00:10:55.480
+to go and check that out.
+
+140
+00:10:55.480 --> 00:10:57.360
+Don't forget to like, comment and
+
+141
+00:10:57.360 --> 00:11:01.360
+subscribe. The support from you guys really helps this channel grow.
+
+142
+00:11:01.360 --> 00:11:17.200
+other than that, thank you for watching! 👍
+
+
+
+mkdir sentence1
+cd sentence1
+ffmpeg -ss 00:00:00.160 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:00:04.880 -c copy -copyts cut1.mp4
+mv /Users/aislin/Desktop/asl/processing/message1.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence1/
+ffmpeg -i cut1.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence2
+cd sentence2
+ffmpeg -ss 00:00:04.880 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:00:21.039 -c copy -copyts cut2.mp4
+mv /Users/aislin/Desktop/asl/processing/message2.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence2/
+ffmpeg -i cut2.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence3
+cd sentence3
+ffmpeg -ss 00:00:21.039 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:00:27.920 -c copy -copyts cut3.mp4
+mv /Users/aislin/Desktop/asl/processing/message3.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence3/
+ffmpeg -i cut3.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence4
+cd sentence4
+ffmpeg -ss 00:00:27.920 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:00:33.440 -c copy -copyts cut4.mp4
+mv /Users/aislin/Desktop/asl/processing/message4.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence4/
+ffmpeg -i cut4.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence5
+cd sentence5
+ffmpeg -ss 00:00:33.440 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:00:37.600 -c copy -copyts cut5.mp4
+mv /Users/aislin/Desktop/asl/processing/message5.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence5/
+ffmpeg -i cut5.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence6
+cd sentence6
+ffmpeg -ss 00:00:37.600 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:00:40.960 -c copy -copyts cut6.mp4
+mv /Users/aislin/Desktop/asl/processing/message6.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence6/
+ffmpeg -i cut6.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence7
+cd sentence7
+ffmpeg -ss 00:00:40.960 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:00:47.200 -c copy -copyts cut7.mp4
+mv /Users/aislin/Desktop/asl/processing/message7.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence7/
+ffmpeg -i cut7.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence8
+cd sentence8
+ffmpeg -ss 00:00:47.200 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:00:53.199 -c copy -copyts cut8.mp4
+mv /Users/aislin/Desktop/asl/processing/message8.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence8/
+ffmpeg -i cut8.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence9
+cd sentence9
+ffmpeg -ss 00:00:53.199 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:00:56.239 -c copy -copyts cut9.mp4
+mv /Users/aislin/Desktop/asl/processing/message9.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence9/
+ffmpeg -i cut9.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence10
+cd sentence10
+ffmpeg -ss 00:00:56.239 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:00:59.840 -c copy -copyts cut10.mp4
+mv /Users/aislin/Desktop/asl/processing/message10.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence10/
+ffmpeg -i cut10.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence11
+cd sentence11
+ffmpeg -ss 00:01:00.000 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:01:05.199 -c copy -copyts cut11.mp4
+mv /Users/aislin/Desktop/asl/processing/message11.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence11/
+ffmpeg -i cut11.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence12
+cd sentence12
+ffmpeg -ss 00:01:05.199 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:01:10.560 -c copy -copyts cut12.mp4
+mv /Users/aislin/Desktop/asl/processing/message12.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence12/
+ffmpeg -i cut12.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence13
+cd sentence13
+ffmpeg -ss 00:01:10.560 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:01:14.960 -c copy -copyts cut13.mp4
+mv /Users/aislin/Desktop/asl/processing/message13.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence13/
+ffmpeg -i cut13.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence14
+cd sentence14
+ffmpeg -ss 00:01:15.759 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:01:19.439 -c copy -copyts cut14.mp4
+mv /Users/aislin/Desktop/asl/processing/message14.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence14/
+ffmpeg -i cut14.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence15
+cd sentence15
+ffmpeg -ss 00:01:19.439 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:01:26.720 -c copy -copyts cut15.mp4
+mv /Users/aislin/Desktop/asl/processing/message15.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence15/
+ffmpeg -i cut15.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence16
+cd sentence16
+ffmpeg -ss 00:01:26.720 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:01:34.079 -c copy -copyts cut16.mp4
+mv /Users/aislin/Desktop/asl/processing/message16.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence16/
+ffmpeg -i cut16.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence17
+cd sentence17
+ffmpeg -ss 00:01:34.079 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:01:37.600 -c copy -copyts cut17.mp4
+mv /Users/aislin/Desktop/asl/processing/message17.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence17/
+ffmpeg -i cut17.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence18
+cd sentence18
+ffmpeg -ss 00:01:37.600 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:01:43.360 -c copy -copyts cut18.mp4
+mv /Users/aislin/Desktop/asl/processing/message18.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence18/
+ffmpeg -i cut18.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence19
+cd sentence19
+ffmpeg -ss 00:01:43.360 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:01:48.079 -c copy -copyts cut19.mp4
+mv /Users/aislin/Desktop/asl/processing/message19.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence19/
+ffmpeg -i cut19.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence20
+cd sentence20
+ffmpeg -ss 00:01:48.079 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:01:53.840 -c copy -copyts cut20.mp4
+mv /Users/aislin/Desktop/asl/processing/message20.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence20/
+ffmpeg -i cut20.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence21
+cd sentence21
+ffmpeg -ss 00:01:53.840 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:01:58.399 -c copy -copyts cut21.mp4
+mv /Users/aislin/Desktop/asl/processing/message21.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence21/
+ffmpeg -i cut21.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence22
+cd sentence22
+ffmpeg -ss 00:01:58.399 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:02:02.479 -c copy -copyts cut22.mp4
+mv /Users/aislin/Desktop/asl/processing/message22.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence22/
+ffmpeg -i cut22.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence23
+cd sentence23
+ffmpeg -ss 00:02:02.479 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:02:06.000 -c copy -copyts cut23.mp4
+mv /Users/aislin/Desktop/asl/processing/message23.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence23/
+ffmpeg -i cut23.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence24
+cd sentence24
+ffmpeg -ss 00:02:06.000 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:02:09.759 -c copy -copyts cut24.mp4
+mv /Users/aislin/Desktop/asl/processing/message24.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence24/
+ffmpeg -i cut24.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence25
+cd sentence25
+ffmpeg -ss 00:02:09.759 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:02:13.520 -c copy -copyts cut25.mp4
+mv /Users/aislin/Desktop/asl/processing/message25.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence25/
+ffmpeg -i cut25.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence26
+cd sentence26
+ffmpeg -ss 00:02:13.520 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:02:17.280 -c copy -copyts cut26.mp4
+mv /Users/aislin/Desktop/asl/processing/message26.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence26/
+ffmpeg -i cut26.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence27
+cd sentence27
+ffmpeg -ss 00:02:17.280 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:02:22.000 -c copy -copyts cut27.mp4
+mv /Users/aislin/Desktop/asl/processing/message27.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence27/
+ffmpeg -i cut27.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence28
+cd sentence28
+ffmpeg -ss 00:02:22.000 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:02:26.640 -c copy -copyts cut28.mp4
+mv /Users/aislin/Desktop/asl/processing/message28.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence28/
+ffmpeg -i cut28.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence29
+cd sentence29
+ffmpeg -ss 00:02:26.640 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:02:30.160 -c copy -copyts cut29.mp4
+mv /Users/aislin/Desktop/asl/processing/message29.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence29/
+ffmpeg -i cut29.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence30
+cd sentence30
+ffmpeg -ss 00:02:30.160 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:02:34.160 -c copy -copyts cut30.mp4
+mv /Users/aislin/Desktop/asl/processing/message30.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence30/
+ffmpeg -i cut30.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence31
+cd sentence31
+ffmpeg -ss 00:02:34.160 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:02:38.400 -c copy -copyts cut31.mp4
+mv /Users/aislin/Desktop/asl/processing/message31.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence31/
+ffmpeg -i cut31.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence32
+cd sentence32
+ffmpeg -ss 00:02:38.400 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:02:43.120 -c copy -copyts cut32.mp4
+mv /Users/aislin/Desktop/asl/processing/message32.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence32/
+ffmpeg -i cut32.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence33
+cd sentence33
+ffmpeg -ss 00:02:43.120 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:02:47.120 -c copy -copyts cut33.mp4
+mv /Users/aislin/Desktop/asl/processing/message33.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence33/
+ffmpeg -i cut33.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence34
+cd sentence34
+ffmpeg -ss 00:02:47.120 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:02:53.280 -c copy -copyts cut34.mp4
+mv /Users/aislin/Desktop/asl/processing/message34.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence34/
+ffmpeg -i cut34.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence35
+cd sentence35
+ffmpeg -ss 00:02:53.280 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:02:57.280 -c copy -copyts cut35.mp4
+mv /Users/aislin/Desktop/asl/processing/message35.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence35/
+ffmpeg -i cut35.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence36
+cd sentence36
+ffmpeg -ss 00:02:57.280 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:03:02.959 -c copy -copyts cut36.mp4
+mv /Users/aislin/Desktop/asl/processing/message36.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence36/
+ffmpeg -i cut36.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence37
+cd sentence37
+ffmpeg -ss 00:03:02.959 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:03:09.040 -c copy -copyts cut37.mp4
+mv /Users/aislin/Desktop/asl/processing/message37.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence37/
+ffmpeg -i cut37.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence38
+cd sentence38
+ffmpeg -ss 00:03:09.040 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:03:13.120 -c copy -copyts cut38.mp4
+mv /Users/aislin/Desktop/asl/processing/message38.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence38/
+ffmpeg -i cut38.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence39
+cd sentence39
+ffmpeg -ss 00:03:13.120 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:03:16.640 -c copy -copyts cut39.mp4
+mv /Users/aislin/Desktop/asl/processing/message39.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence39/
+ffmpeg -i cut39.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence40
+cd sentence40
+ffmpeg -ss 00:03:16.640 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:03:20.239 -c copy -copyts cut40.mp4
+mv /Users/aislin/Desktop/asl/processing/message40.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence40/
+ffmpeg -i cut40.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence41
+cd sentence41
+ffmpeg -ss 00:03:20.239 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:03:22.640 -c copy -copyts cut41.mp4
+mv /Users/aislin/Desktop/asl/processing/message41.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence41/
+ffmpeg -i cut41.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentenceVLAN
+cd sentenceVLAN
+ffmpeg -ss 
+ -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to  -c copy -copyts cutVLAN.mp4
+mv /Users/aislin/Desktop/asl/processing/messageVLAN.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentenceVLAN/
+ffmpeg -i cutVLAN.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence42
+cd sentence42
+ffmpeg -ss 00:03:23.280 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:03:26.640 -c copy -copyts cut42.mp4
+mv /Users/aislin/Desktop/asl/processing/message42.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence42/
+ffmpeg -i cut42.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence43
+cd sentence43
+ffmpeg -ss 00:03:26.640 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:03:31.680 -c copy -copyts cut43.mp4
+mv /Users/aislin/Desktop/asl/processing/message43.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence43/
+ffmpeg -i cut43.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence44
+cd sentence44
+ffmpeg -ss 00:03:31.680 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:03:37.519 -c copy -copyts cut44.mp4
+mv /Users/aislin/Desktop/asl/processing/message44.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence44/
+ffmpeg -i cut44.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence45
+cd sentence45
+ffmpeg -ss 00:03:37.519 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:03:40.720 -c copy -copyts cut45.mp4
+mv /Users/aislin/Desktop/asl/processing/message45.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence45/
+ffmpeg -i cut45.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence46
+cd sentence46
+ffmpeg -ss 00:03:40.720 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:03:45.440 -c copy -copyts cut46.mp4
+mv /Users/aislin/Desktop/asl/processing/message46.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence46/
+ffmpeg -i cut46.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence47
+cd sentence47
+ffmpeg -ss 00:03:45.440 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:03:52.400 -c copy -copyts cut47.mp4
+mv /Users/aislin/Desktop/asl/processing/message47.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence47/
+ffmpeg -i cut47.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence48
+cd sentence48
+ffmpeg -ss 00:03:52.400 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:03:55.680 -c copy -copyts cut48.mp4
+mv /Users/aislin/Desktop/asl/processing/message48.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence48/
+ffmpeg -i cut48.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence49
+cd sentence49
+ffmpeg -ss 00:03:55.680 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:04:02.000 -c copy -copyts cut49.mp4
+mv /Users/aislin/Desktop/asl/processing/message49.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence49/
+ffmpeg -i cut49.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence50
+cd sentence50
+ffmpeg -ss 00:04:02.000 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:04:04.959 -c copy -copyts cut50.mp4
+mv /Users/aislin/Desktop/asl/processing/message50.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence50/
+ffmpeg -i cut50.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence51
+cd sentence51
+ffmpeg -ss 00:04:04.959 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:04:08.720 -c copy -copyts cut51.mp4
+mv /Users/aislin/Desktop/asl/processing/message51.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence51/
+ffmpeg -i cut51.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence52
+cd sentence52
+ffmpeg -ss 00:04:08.720 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:04:13.599 -c copy -copyts cut52.mp4
+mv /Users/aislin/Desktop/asl/processing/message52.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence52/
+ffmpeg -i cut52.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence53
+cd sentence53
+ffmpeg -ss 00:04:13.599 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:04:18.079 -c copy -copyts cut53.mp4
+mv /Users/aislin/Desktop/asl/processing/message53.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence53/
+ffmpeg -i cut53.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence54
+cd sentence54
+ffmpeg -ss 00:04:18.079 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:04:23.759 -c copy -copyts cut54.mp4
+mv /Users/aislin/Desktop/asl/processing/message54.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence54/
+ffmpeg -i cut54.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence55
+cd sentence55
+ffmpeg -ss 00:04:23.759 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:04:26.320 -c copy -copyts cut55.mp4
+mv /Users/aislin/Desktop/asl/processing/message55.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence55/
+ffmpeg -i cut55.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentencesupported
+cd sentencesupported
+ffmpeg -ss 
+ -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to  -c copy -copyts cutsupported.mp4
+mv /Users/aislin/Desktop/asl/processing/messagesupported.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentencesupported/
+ffmpeg -i cutsupported.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence56
+cd sentence56
+ffmpeg -ss 00:04:26.479 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:04:30.479 -c copy -copyts cut56.mp4
+mv /Users/aislin/Desktop/asl/processing/message56.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence56/
+ffmpeg -i cut56.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence57
+cd sentence57
+ffmpeg -ss 00:04:30.479 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:04:37.120 -c copy -copyts cut57.mp4
+mv /Users/aislin/Desktop/asl/processing/message57.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence57/
+ffmpeg -i cut57.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence58
+cd sentence58
+ffmpeg -ss 00:04:37.120 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:04:40.400 -c copy -copyts cut58.mp4
+mv /Users/aislin/Desktop/asl/processing/message58.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence58/
+ffmpeg -i cut58.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence59
+cd sentence59
+ffmpeg -ss 00:04:40.400 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:04:44.080 -c copy -copyts cut59.mp4
+mv /Users/aislin/Desktop/asl/processing/message59.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence59/
+ffmpeg -i cut59.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence60
+cd sentence60
+ffmpeg -ss 00:04:44.080 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:04:47.600 -c copy -copyts cut60.mp4
+mv /Users/aislin/Desktop/asl/processing/message60.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence60/
+ffmpeg -i cut60.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence61
+cd sentence61
+ffmpeg -ss 00:04:47.600 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:04:52.160 -c copy -copyts cut61.mp4
+mv /Users/aislin/Desktop/asl/processing/message61.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence61/
+ffmpeg -i cut61.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence62
+cd sentence62
+ffmpeg -ss 00:04:52.160 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:04:57.199 -c copy -copyts cut62.mp4
+mv /Users/aislin/Desktop/asl/processing/message62.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence62/
+ffmpeg -i cut62.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence63
+cd sentence63
+ffmpeg -ss 00:04:57.199 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:05:01.919 -c copy -copyts cut63.mp4
+mv /Users/aislin/Desktop/asl/processing/message63.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence63/
+ffmpeg -i cut63.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence64
+cd sentence64
+ffmpeg -ss 00:05:01.919 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:05:06.400 -c copy -copyts cut64.mp4
+mv /Users/aislin/Desktop/asl/processing/message64.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence64/
+ffmpeg -i cut64.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence65
+cd sentence65
+ffmpeg -ss 00:05:06.400 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:05:10.639 -c copy -copyts cut65.mp4
+mv /Users/aislin/Desktop/asl/processing/message65.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence65/
+ffmpeg -i cut65.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence66
+cd sentence66
+ffmpeg -ss 00:05:10.639 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:05:15.199 -c copy -copyts cut66.mp4
+mv /Users/aislin/Desktop/asl/processing/message66.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence66/
+ffmpeg -i cut66.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence67
+cd sentence67
+ffmpeg -ss 00:05:15.199 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:05:18.880 -c copy -copyts cut67.mp4
+mv /Users/aislin/Desktop/asl/processing/message67.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence67/
+ffmpeg -i cut67.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence68
+cd sentence68
+ffmpeg -ss 00:05:19.120 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:05:22.800 -c copy -copyts cut68.mp4
+mv /Users/aislin/Desktop/asl/processing/message68.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence68/
+ffmpeg -i cut68.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence69
+cd sentence69
+ffmpeg -ss 00:05:22.800 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:05:26.880 -c copy -copyts cut69.mp4
+mv /Users/aislin/Desktop/asl/processing/message69.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence69/
+ffmpeg -i cut69.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence70
+cd sentence70
+ffmpeg -ss 00:05:26.880 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:05:32.400 -c copy -copyts cut70.mp4
+mv /Users/aislin/Desktop/asl/processing/message70.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence70/
+ffmpeg -i cut70.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence71
+cd sentence71
+ffmpeg -ss 00:05:32.400 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:05:35.440 -c copy -copyts cut71.mp4
+mv /Users/aislin/Desktop/asl/processing/message71.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence71/
+ffmpeg -i cut71.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence72
+cd sentence72
+ffmpeg -ss 00:05:35.440 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:05:40.960 -c copy -copyts cut72.mp4
+mv /Users/aislin/Desktop/asl/processing/message72.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence72/
+ffmpeg -i cut72.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence73
+cd sentence73
+ffmpeg -ss 00:05:40.960 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:05:45.120 -c copy -copyts cut73.mp4
+mv /Users/aislin/Desktop/asl/processing/message73.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence73/
+ffmpeg -i cut73.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence74
+cd sentence74
+ffmpeg -ss 00:05:45.120 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:05:49.360 -c copy -copyts cut74.mp4
+mv /Users/aislin/Desktop/asl/processing/message74.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence74/
+ffmpeg -i cut74.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence75
+cd sentence75
+ffmpeg -ss 00:05:49.360 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:05:54.240 -c copy -copyts cut75.mp4
+mv /Users/aislin/Desktop/asl/processing/message75.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence75/
+ffmpeg -i cut75.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence76
+cd sentence76
+ffmpeg -ss 00:05:54.240 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:05:59.520 -c copy -copyts cut76.mp4
+mv /Users/aislin/Desktop/asl/processing/message76.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence76/
+ffmpeg -i cut76.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence77
+cd sentence77
+ffmpeg -ss 00:05:59.520 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:06:03.120 -c copy -copyts cut77.mp4
+mv /Users/aislin/Desktop/asl/processing/message77.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence77/
+ffmpeg -i cut77.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence78
+cd sentence78
+ffmpeg -ss 00:06:03.120 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:06:07.600 -c copy -copyts cut78.mp4
+mv /Users/aislin/Desktop/asl/processing/message78.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence78/
+ffmpeg -i cut78.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence79
+cd sentence79
+ffmpeg -ss 00:06:07.600 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:06:11.759 -c copy -copyts cut79.mp4
+mv /Users/aislin/Desktop/asl/processing/message79.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence79/
+ffmpeg -i cut79.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence80
+cd sentence80
+ffmpeg -ss 00:06:11.759 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:06:15.680 -c copy -copyts cut80.mp4
+mv /Users/aislin/Desktop/asl/processing/message80.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence80/
+ffmpeg -i cut80.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence81
+cd sentence81
+ffmpeg -ss 00:06:15.680 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:06:20.720 -c copy -copyts cut81.mp4
+mv /Users/aislin/Desktop/asl/processing/message81.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence81/
+ffmpeg -i cut81.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence82
+cd sentence82
+ffmpeg -ss 00:06:20.720 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:06:26.960 -c copy -copyts cut82.mp4
+mv /Users/aislin/Desktop/asl/processing/message82.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence82/
+ffmpeg -i cut82.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence83
+cd sentence83
+ffmpeg -ss 00:06:26.960 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:06:30.080 -c copy -copyts cut83.mp4
+mv /Users/aislin/Desktop/asl/processing/message83.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence83/
+ffmpeg -i cut83.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence84
+cd sentence84
+ffmpeg -ss 00:06:30.080 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:06:34.400 -c copy -copyts cut84.mp4
+mv /Users/aislin/Desktop/asl/processing/message84.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence84/
+ffmpeg -i cut84.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence85
+cd sentence85
+ffmpeg -ss 00:06:34.400 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:06:38.880 -c copy -copyts cut85.mp4
+mv /Users/aislin/Desktop/asl/processing/message85.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence85/
+ffmpeg -i cut85.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence86
+cd sentence86
+ffmpeg -ss 00:06:38.880 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:06:43.759 -c copy -copyts cut86.mp4
+mv /Users/aislin/Desktop/asl/processing/message86.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence86/
+ffmpeg -i cut86.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence87
+cd sentence87
+ffmpeg -ss 00:06:43.759 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:06:47.120 -c copy -copyts cut87.mp4
+mv /Users/aislin/Desktop/asl/processing/message87.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence87/
+ffmpeg -i cut87.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence88
+cd sentence88
+ffmpeg -ss 00:06:47.120 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:06:52.560 -c copy -copyts cut88.mp4
+mv /Users/aislin/Desktop/asl/processing/message88.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence88/
+ffmpeg -i cut88.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence89
+cd sentence89
+ffmpeg -ss 00:06:52.560 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:06:56.160 -c copy -copyts cut89.mp4
+mv /Users/aislin/Desktop/asl/processing/message89.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence89/
+ffmpeg -i cut89.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence90
+cd sentence90
+ffmpeg -ss 00:06:56.160 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:07:02.400 -c copy -copyts cut90.mp4
+mv /Users/aislin/Desktop/asl/processing/message90.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence90/
+ffmpeg -i cut90.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence91
+cd sentence91
+ffmpeg -ss 00:07:02.400 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:07:06.160 -c copy -copyts cut91.mp4
+mv /Users/aislin/Desktop/asl/processing/message91.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence91/
+ffmpeg -i cut91.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence92
+cd sentence92
+ffmpeg -ss 00:07:06.160 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:07:11.160 -c copy -copyts cut92.mp4
+mv /Users/aislin/Desktop/asl/processing/message92.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence92/
+ffmpeg -i cut92.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence93
+cd sentence93
+ffmpeg -ss 00:07:11.160 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:07:17.440 -c copy -copyts cut93.mp4
+mv /Users/aislin/Desktop/asl/processing/message93.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence93/
+ffmpeg -i cut93.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence94
+cd sentence94
+ffmpeg -ss 00:07:17.440 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:07:21.919 -c copy -copyts cut94.mp4
+mv /Users/aislin/Desktop/asl/processing/message94.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence94/
+ffmpeg -i cut94.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence95
+cd sentence95
+ffmpeg -ss 00:07:21.919 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:07:28.520 -c copy -copyts cut95.mp4
+mv /Users/aislin/Desktop/asl/processing/message95.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence95/
+ffmpeg -i cut95.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence96
+cd sentence96
+ffmpeg -ss 00:07:28.520 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:07:33.360 -c copy -copyts cut96.mp4
+mv /Users/aislin/Desktop/asl/processing/message96.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence96/
+ffmpeg -i cut96.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence97
+cd sentence97
+ffmpeg -ss 00:07:33.360 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:07:38.400 -c copy -copyts cut97.mp4
+mv /Users/aislin/Desktop/asl/processing/message97.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence97/
+ffmpeg -i cut97.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence98
+cd sentence98
+ffmpeg -ss 00:07:38.400 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:07:42.960 -c copy -copyts cut98.mp4
+mv /Users/aislin/Desktop/asl/processing/message98.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence98/
+ffmpeg -i cut98.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence99
+cd sentence99
+ffmpeg -ss 00:07:42.960 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:07:47.199 -c copy -copyts cut99.mp4
+mv /Users/aislin/Desktop/asl/processing/message99.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence99/
+ffmpeg -i cut99.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence100
+cd sentence100
+ffmpeg -ss 00:07:47.199 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:07:55.120 -c copy -copyts cut100.mp4
+mv /Users/aislin/Desktop/asl/processing/message100.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence100/
+ffmpeg -i cut100.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence101
+cd sentence101
+ffmpeg -ss 00:07:55.120 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:07:59.919 -c copy -copyts cut101.mp4
+mv /Users/aislin/Desktop/asl/processing/message101.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence101/
+ffmpeg -i cut101.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence102
+cd sentence102
+ffmpeg -ss 00:07:59.919 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:08:05.120 -c copy -copyts cut102.mp4
+mv /Users/aislin/Desktop/asl/processing/message102.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence102/
+ffmpeg -i cut102.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence103
+cd sentence103
+ffmpeg -ss 00:08:05.120 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:08:10.840 -c copy -copyts cut103.mp4
+mv /Users/aislin/Desktop/asl/processing/message103.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence103/
+ffmpeg -i cut103.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence104
+cd sentence104
+ffmpeg -ss 00:08:10.840 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:08:14.639 -c copy -copyts cut104.mp4
+mv /Users/aislin/Desktop/asl/processing/message104.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence104/
+ffmpeg -i cut104.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence105
+cd sentence105
+ffmpeg -ss 00:08:14.639 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:08:20.319 -c copy -copyts cut105.mp4
+mv /Users/aislin/Desktop/asl/processing/message105.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence105/
+ffmpeg -i cut105.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence106
+cd sentence106
+ffmpeg -ss 00:08:20.319 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:08:26.479 -c copy -copyts cut106.mp4
+mv /Users/aislin/Desktop/asl/processing/message106.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence106/
+ffmpeg -i cut106.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence107
+cd sentence107
+ffmpeg -ss 00:08:26.479 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:08:30.639 -c copy -copyts cut107.mp4
+mv /Users/aislin/Desktop/asl/processing/message107.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence107/
+ffmpeg -i cut107.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence108
+cd sentence108
+ffmpeg -ss 00:08:30.639 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:08:36.880 -c copy -copyts cut108.mp4
+mv /Users/aislin/Desktop/asl/processing/message108.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence108/
+ffmpeg -i cut108.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence109
+cd sentence109
+ffmpeg -ss 00:08:36.880 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:08:41.120 -c copy -copyts cut109.mp4
+mv /Users/aislin/Desktop/asl/processing/message109.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence109/
+ffmpeg -i cut109.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence110
+cd sentence110
+ffmpeg -ss 00:08:41.120 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:08:46.480 -c copy -copyts cut110.mp4
+mv /Users/aislin/Desktop/asl/processing/message110.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence110/
+ffmpeg -i cut110.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence111
+cd sentence111
+ffmpeg -ss 00:08:46.480 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:08:49.920 -c copy -copyts cut111.mp4
+mv /Users/aislin/Desktop/asl/processing/message111.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence111/
+ffmpeg -i cut111.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence112
+cd sentence112
+ffmpeg -ss 00:08:49.920 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:08:52.959 -c copy -copyts cut112.mp4
+mv /Users/aislin/Desktop/asl/processing/message112.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence112/
+ffmpeg -i cut112.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence113
+cd sentence113
+ffmpeg -ss 00:08:52.959 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:08:58.800 -c copy -copyts cut113.mp4
+mv /Users/aislin/Desktop/asl/processing/message113.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence113/
+ffmpeg -i cut113.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence114
+cd sentence114
+ffmpeg -ss 00:08:58.800 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:09:01.839 -c copy -copyts cut114.mp4
+mv /Users/aislin/Desktop/asl/processing/message114.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence114/
+ffmpeg -i cut114.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence115
+cd sentence115
+ffmpeg -ss 00:09:01.839 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:09:07.600 -c copy -copyts cut115.mp4
+mv /Users/aislin/Desktop/asl/processing/message115.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence115/
+ffmpeg -i cut115.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence116
+cd sentence116
+ffmpeg -ss 00:09:07.600 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:09:13.680 -c copy -copyts cut116.mp4
+mv /Users/aislin/Desktop/asl/processing/message116.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence116/
+ffmpeg -i cut116.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence117
+cd sentence117
+ffmpeg -ss 00:09:13.680 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:09:19.200 -c copy -copyts cut117.mp4
+mv /Users/aislin/Desktop/asl/processing/message117.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence117/
+ffmpeg -i cut117.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence118
+cd sentence118
+ffmpeg -ss 00:09:19.200 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:09:26.320 -c copy -copyts cut118.mp4
+mv /Users/aislin/Desktop/asl/processing/message118.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence118/
+ffmpeg -i cut118.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence119
+cd sentence119
+ffmpeg -ss 00:09:26.320 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:09:31.040 -c copy -copyts cut119.mp4
+mv /Users/aislin/Desktop/asl/processing/message119.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence119/
+ffmpeg -i cut119.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence120
+cd sentence120
+ffmpeg -ss 00:09:31.040 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:09:37.279 -c copy -copyts cut120.mp4
+mv /Users/aislin/Desktop/asl/processing/message120.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence120/
+ffmpeg -i cut120.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence121
+cd sentence121
+ffmpeg -ss 00:09:37.279 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:09:41.839 -c copy -copyts cut121.mp4
+mv /Users/aislin/Desktop/asl/processing/message121.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence121/
+ffmpeg -i cut121.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence122
+cd sentence122
+ffmpeg -ss 00:09:41.839 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:09:45.760 -c copy -copyts cut122.mp4
+mv /Users/aislin/Desktop/asl/processing/message122.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence122/
+ffmpeg -i cut122.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence123
+cd sentence123
+ffmpeg -ss 00:09:45.760 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:09:51.519 -c copy -copyts cut123.mp4
+mv /Users/aislin/Desktop/asl/processing/message123.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence123/
+ffmpeg -i cut123.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence124
+cd sentence124
+ffmpeg -ss 00:09:51.519 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:09:56.880 -c copy -copyts cut124.mp4
+mv /Users/aislin/Desktop/asl/processing/message124.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence124/
+ffmpeg -i cut124.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence125
+cd sentence125
+ffmpeg -ss 00:09:56.880 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:10:00.560 -c copy -copyts cut125.mp4
+mv /Users/aislin/Desktop/asl/processing/message125.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence125/
+ffmpeg -i cut125.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence126
+cd sentence126
+ffmpeg -ss 00:10:00.560 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:10:06.959 -c copy -copyts cut126.mp4
+mv /Users/aislin/Desktop/asl/processing/message126.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence126/
+ffmpeg -i cut126.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence127
+cd sentence127
+ffmpeg -ss 00:10:06.959 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:10:10.720 -c copy -copyts cut127.mp4
+mv /Users/aislin/Desktop/asl/processing/message127.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence127/
+ffmpeg -i cut127.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence128
+cd sentence128
+ffmpeg -ss 00:10:10.720 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:10:14.399 -c copy -copyts cut128.mp4
+mv /Users/aislin/Desktop/asl/processing/message128.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence128/
+ffmpeg -i cut128.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence129
+cd sentence129
+ffmpeg -ss 00:10:14.399 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:10:19.040 -c copy -copyts cut129.mp4
+mv /Users/aislin/Desktop/asl/processing/message129.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence129/
+ffmpeg -i cut129.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence130
+cd sentence130
+ffmpeg -ss 00:10:19.040 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:10:23.839 -c copy -copyts cut130.mp4
+mv /Users/aislin/Desktop/asl/processing/message130.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence130/
+ffmpeg -i cut130.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence131
+cd sentence131
+ffmpeg -ss 00:10:23.839 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:10:27.760 -c copy -copyts cut131.mp4
+mv /Users/aislin/Desktop/asl/processing/message131.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence131/
+ffmpeg -i cut131.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence132
+cd sentence132
+ffmpeg -ss 00:10:27.760 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:10:32.880 -c copy -copyts cut132.mp4
+mv /Users/aislin/Desktop/asl/processing/message132.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence132/
+ffmpeg -i cut132.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence133
+cd sentence133
+ffmpeg -ss 00:10:32.880 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:10:38.000 -c copy -copyts cut133.mp4
+mv /Users/aislin/Desktop/asl/processing/message133.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence133/
+ffmpeg -i cut133.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence134
+cd sentence134
+ffmpeg -ss 00:10:38.000 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:10:41.279 -c copy -copyts cut134.mp4
+mv /Users/aislin/Desktop/asl/processing/message134.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence134/
+ffmpeg -i cut134.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence135
+cd sentence135
+ffmpeg -ss 00:10:41.279 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:10:44.320 -c copy -copyts cut135.mp4
+mv /Users/aislin/Desktop/asl/processing/message135.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence135/
+ffmpeg -i cut135.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence136
+cd sentence136
+ffmpeg -ss 00:10:44.320 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:10:47.400 -c copy -copyts cut136.mp4
+mv /Users/aislin/Desktop/asl/processing/message136.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence136/
+ffmpeg -i cut136.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence137
+cd sentence137
+ffmpeg -ss 00:10:47.600 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:10:49.520 -c copy -copyts cut137.mp4
+mv /Users/aislin/Desktop/asl/processing/message137.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence137/
+ffmpeg -i cut137.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence138
+cd sentence138
+ffmpeg -ss 00:10:49.520 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:10:53.040 -c copy -copyts cut138.mp4
+mv /Users/aislin/Desktop/asl/processing/message138.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence138/
+ffmpeg -i cut138.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence139
+cd sentence139
+ffmpeg -ss 00:10:53.040 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:10:55.480 -c copy -copyts cut139.mp4
+mv /Users/aislin/Desktop/asl/processing/message139.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence139/
+ffmpeg -i cut139.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence140
+cd sentence140
+ffmpeg -ss 00:10:55.480 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:10:57.360 -c copy -copyts cut140.mp4
+mv /Users/aislin/Desktop/asl/processing/message140.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence140/
+ffmpeg -i cut140.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence141
+cd sentence141
+ffmpeg -ss 00:10:57.360 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:11:01.360 -c copy -copyts cut141.mp4
+mv /Users/aislin/Desktop/asl/processing/message141.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence141/
+ffmpeg -i cut141.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
+mkdir sentence142
+cd sentence142
+ffmpeg -ss 00:11:01.360 -i /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/hci01.mp4 -to 00:11:17.200 -c copy -copyts cut142.mp4
+mv /Users/aislin/Desktop/asl/processing/message142.txt /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30/sentence142/
+ffmpeg -i cut142.mp4 -r 1 output_%04d.jpeg 
+cd /Users/aislin/Desktop/asl/processing/asl_pondering_sentenceLevel30
+    
