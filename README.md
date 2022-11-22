@@ -8,3 +8,5 @@
 >>>>>>>>>>>smaller chunks but why would we want to do that? Well
 >>> comments only supposed to have one line space :) time duration needs to be in dots separation. 
 > extract the textfile content before moving to the command line for the last step. 
+>>>>!!!remember to edit the filerewrite!!
+
