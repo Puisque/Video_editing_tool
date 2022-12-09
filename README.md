@@ -10,3 +10,7 @@
 > extract the textfile content before moving to the command line for the last step. 
 >>>>!!!remember to edit the filerewrite!!
 
+first check the original text file format. Substitute the , to .
+then extract the text contents to different files. 
+make sure the extracted files are in the same folder as the future picture frames subfolders. 
+
